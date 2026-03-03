@@ -3,6 +3,5 @@ network/fabric-env.sh
 bin/
 config/
 builders/
-chaincode/*/vendor/
 *.test
 .DS_Store

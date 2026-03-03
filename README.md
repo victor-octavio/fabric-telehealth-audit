@@ -10,7 +10,7 @@ A Hyperledger Fabric-based prototype for auditability of diagnostics in emergenc
 
 ## Starting the local network
 ```bash
-./network/microfab-setup.sh
+./network/friendly-microfab-setup.sh
 source network/fabric-env.sh
 peer channel list
 ```

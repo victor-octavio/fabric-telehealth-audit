@@ -1,4 +1,4 @@
-package diagnosticlogs
+package main
 
 import (
 	"encoding/json"
@@ -56,4 +56,60 @@ func (s *SmartContract) DiagnosticExists(ctx contractapi.TransactionContextInter
 		return false, err
 	}
 	return record != nil, nil
+}
+
+func (s *SmartContract) ReadDiagnosis(ctx contractapi.TransactionContextInterface, id string) (*DiagnosticRecord, error) {
+	recordJson, err := ctx.GetStub().GetState(id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if recordJson == nil {
+		return nil, fmt.Errorf("diagnosis not found, { id: %s }", id)
+	}
+
+	var record DiagnosticRecord
+
+	if err := json.Unmarshal(recordJson, &record); err != nil {
+		return nil, err
+	}
+
+	return &record, nil
+}
+
+func (s *SmartContract) GetHistory(ctx contractapi.TransactionContextInterface, id string) ([]*DiagnosticRecord, error) {
+	historyIterator, err := ctx.GetStub().GetHistoryForKey(id)
+	if err != nil {
+		return nil, err
+	}
+
+	defer historyIterator.Close()
+	var history []*DiagnosticRecord
+
+	for historyIterator.HasNext() {
+		entry, err := historyIterator.Next()
+		if err != nil {
+			return nil, err
+		}
+
+		var record DiagnosticRecord
+		if err := json.Unmarshal(entry.Value, &record); err != nil {
+			return nil, err
+		}
+
+		history = append(history, &record)
+	}
+	return history, nil
+}
+
+func main() {
+	chaincode, err := contractapi.NewChaincode(&SmartContract{})
+	if err != nil {
+		fmt.Printf("error creating chaincode, err = %v\n", err)
+		return
+	}
+	if err := chaincode.Start(); err != nil {
+		fmt.Printf("an error occurred during the chaincode start up")
+	}
 }

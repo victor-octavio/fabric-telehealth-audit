@@ -1,6 +1,6 @@
 module fabric-telehealth-audit
 
-go 1.25.5
+go 1.23
 
 require github.com/hyperledger/fabric-contract-api-go v1.2.2
 

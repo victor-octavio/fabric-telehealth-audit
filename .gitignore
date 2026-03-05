@@ -5,3 +5,6 @@ config/
 builders/
 *.test
 .DS_Store
+go.sum
+*.tar.gz
+chaincode/*/vendor/

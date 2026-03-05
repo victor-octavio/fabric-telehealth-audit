@@ -19,8 +19,7 @@ else
       "endorsing_organizations": [{ "name": "Org1" }],
       "channels": [{ "name": "mychannel", "endorsing_organizations": ["Org1"] }],
       "capability_level": "V2_0"
-    }' \
-    ibmcom/ibp-microfab:latest
+    }'
 
   echo "    Waiting microfab to start..."
   sleep 5
